@@ -40,3 +40,15 @@ exports.redirectUrl = async (req, res) => {
 
     res.redirect(shortUrl.originalUrl);
 };
+
+exports.getAllUrls = async (req, res) => {
+
+    const shortUrls = await ShortUrl.findAll({raw: true});
+    const baseUrl = req.get('host');
+    let allUrls = [];
+    if (shortUrls) {
+        allUrls = shortUrls.map(({id, createdAt, updatedAt, ...rest}) => rest);
+        allUrls.map(url => url.urlId = `${baseUrl}/${url.urlId}`);
+    }
+    return res.json(allUrls);
+}
