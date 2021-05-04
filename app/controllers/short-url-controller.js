@@ -1,7 +1,8 @@
 const { ShortUrl } = require('../models');
 
 exports.createShortUrl = async (req, res) => {
-    let {url, ex} = req.query;
+    let {url, ex} = req.body;
+    console.log(url);
 
     if (!ex) {
         ex = new Date();
@@ -29,9 +30,8 @@ const generateAndValidateShortUrl = async () => {
     return urlId;
 };
 
-exports.redirectUrl = async (req, res) => {
+exports.redirectUrl = async (req, res, next) => {
     const urlId = req.params.urlId;
-
     const shortUrl = await ShortUrl.findOne({where: {urlId}});
 
     if (!shortUrl) {
