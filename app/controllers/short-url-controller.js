@@ -2,14 +2,13 @@ const { ShortUrl } = require('../models');
 
 exports.createShortUrl = async (req, res) => {
     let {url, ex} = req.body;
-    console.log(url);
 
     if (!ex) {
         ex = new Date();
         ex.setMonth(ex.getMonth() + 3);
     }
 
-    const urlId = await generateAndValidateShortUrl();
+    const urlId = await generateAndValidShortUrl();
 
     await ShortUrl.create({
         originalUrl: url,
@@ -20,11 +19,11 @@ exports.createShortUrl = async (req, res) => {
     return res.json({newUrl: `${req.get('host')}/${urlId}`});
 };
 
-const generateAndValidateShortUrl = async () => {
+const generateAndValidShortUrl = async () => {
     const urlId = Math.random().toString(36).substring(7);
     const shortUrl = await ShortUrl.findOne({where: {urlId}});
     if (shortUrl) {
-        return generateAndValidateShortUrl();
+        return generateAndValidShortUrl();
     }
 
     return urlId;

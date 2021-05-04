@@ -7,5 +7,4 @@ router.post('/urls', shortUrlController.createShortUrl);
 router.get('/urls', shortUrlController.getAllUrls);
 
 router.get('/:urlId', shortUrlController.redirectUrl);
-
 module.exports = router;
